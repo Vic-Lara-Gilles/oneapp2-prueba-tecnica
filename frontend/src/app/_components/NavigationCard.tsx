@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { memo } from 'react'
 
 interface NavigationCardProps {
   href: string
@@ -11,7 +12,7 @@ interface NavigationCardProps {
   colorScheme: 'purple' | 'blue'
 }
 
-export default function NavigationCard({
+function NavigationCard({
   href,
   icon,
   iconAlt,
@@ -47,6 +48,8 @@ export default function NavigationCard({
             alt={iconAlt}
             width={24} 
             height={24}
+            priority
+            sizes="24px"
           />
         </div>
         <h2 className="text-2xl font-semibold text-gray-900">
@@ -65,3 +68,6 @@ export default function NavigationCard({
     </Link>
   )
 }
+
+// Memoizar componente para evitar re-renders innecesarios
+export default memo(NavigationCard)

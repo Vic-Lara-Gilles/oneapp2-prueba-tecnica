@@ -1,8 +1,10 @@
+import { memo } from 'react'
+
 interface TechStackProps {
   technologies: string[]
 }
 
-export default function TechStack({ technologies }: TechStackProps) {
+function TechStack({ technologies }: TechStackProps) {
   return (
     <div className="mt-12 p-6 bg-white rounded-xl shadow-md border border-gray-200">
       <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -21,3 +23,6 @@ export default function TechStack({ technologies }: TechStackProps) {
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders innecesarios
+export default memo(TechStack)
