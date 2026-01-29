@@ -30,9 +30,12 @@ export async function createResponse(data: CreateResponseDTO): Promise<ResponseE
 
 /**
  * GET /api/responses/count - Obtener conteo total
+ * Context7: Next.js fetch with cache revalidation
  */
 export async function getCount(): Promise<CountResponse> {
-  const response = await fetch(`${API_URL}/api/responses/count`)
+  const response = await fetch(`${API_URL}/api/responses/count`, {
+    next: { revalidate: 10 }, // Revalidar cada 10 segundos
+  })
   
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`)
@@ -43,9 +46,12 @@ export async function getCount(): Promise<CountResponse> {
 
 /**
  * GET /api/responses/recent - Obtener últimas 5 respuestas
+ * Context7: Next.js fetch with cache revalidation
  */
 export async function getRecent(): Promise<ResponseEntity[]> {
-  const response = await fetch(`${API_URL}/api/responses/recent`)
+  const response = await fetch(`${API_URL}/api/responses/recent`, {
+    next: { revalidate: 10 }, // Revalidar cada 10 segundos
+  })
   
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`)
@@ -56,9 +62,12 @@ export async function getRecent(): Promise<ResponseEntity[]> {
 
 /**
  * GET /api/responses/stats - Obtener estadísticas de lenguajes
+ * Context7: Next.js fetch with cache revalidation
  */
 export async function getStats(): Promise<LanguageStats[]> {
-  const response = await fetch(`${API_URL}/api/responses/stats`)
+  const response = await fetch(`${API_URL}/api/responses/stats`, {
+    next: { revalidate: 10 }, // Revalidar cada 10 segundos
+  })
   
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`)
