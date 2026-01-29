@@ -1,68 +1,33 @@
-# Frontend - Sistema de Formularios y Dashboard de Análisis
+# Frontend - Sistema de Formularios y Dashboard
 
-Este es un proyecto de [Next.js](https://nextjs.org) creado con [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) que implementa un sistema de captura de datos mediante formularios y visualización de estadísticas en tiempo real.
+Frontend de la prueba técnica desarrollado con Next.js 14 (App Router), React 18 y TypeScript.
 
 ## 📋 Requisitos Previos
 
-Antes de comenzar, asegúrate de tener instalado:
+- **Node.js**: 18.0.0 o superior
+- **npm**: 8.0.0 o superior
 
-- **Node.js**: Versión 18.0.0 o superior
-- **npm**: Versión 8.0.0 o superior (incluido con Node.js)
-
-### Verificar las versiones instaladas:
 ```bash
-node --version
-npm --version
+node --version  # >= 18.0.0
+npm --version   # >= 8.0.0
 ```
 
-### Instalar Node.js (si no lo tienes):
-- Descarga desde [nodejs.org](https://nodejs.org/)
-- O usa un gestor de versiones como nvm:
+## 🚀 Instalación
+
 ```bash
-# Instalar nvm (macOS/Linux)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-
-# Instalar Node.js 18
-nvm install 18
-nvm use 18
-```
-
-## 🚀 Instalación y Configuración
-
-### 1. Clonar el repositorio
-```bash
-git clone [URL_DEL_REPOSITORIO]
-cd "Prueba Técnica Andain/frontend"
-```
-
-### 2. Instalar dependencias
-```bash
+# Instalar dependencias
 npm install
-```
 
-Este comando instalará todas las dependencias necesarias incluyendo:
-- Next.js 14.2.30
-- React 18.2.0
-- TypeScript 5
-- Tailwind CSS 3.4.0
-- ESLint
-
-### 3. Verificar la instalación
-```bash
-npm list --depth=0
+# Configurar variables de entorno
+cp .env.local.example .env.local
 ```
 
 ## 🏃‍♂️ Ejecutar el Proyecto
 
-### Servidor de Desarrollo
 ```bash
+# Servidor de desarrollo
 npm run dev
-```
 
-Esto iniciará el servidor de desarrollo en [http://localhost:3000](http://localhost:3000).
-
-### Otros comandos disponibles:
-```bash
 # Construir para producción
 npm run build
 
@@ -73,299 +38,183 @@ npm run start
 npm run lint
 ```
 
-## 🔧 Configuración del Backend
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
-**⚠️ Importante**: Antes de usar la aplicación, asegúrate de que el backend service y PostgreSQL estén ejecutándose.
+## 🔧 Configuración
 
-### Requisitos del Backend:
-- El backend debe estar ejecutándose en `http://localhost:4001`
-- PostgreSQL debe estar activo en `localhost:5432`
-- Endpoints principales:
-  - `POST /api/responses` - Enviar respuesta del formulario
-  - `GET /api/responses/count` - Obtener total de respuestas
-  - `GET /api/responses/recent` - Obtener últimas 5 respuestas
-  - `GET /api/responses/stats` - Obtener estadísticas de lenguajes
+### Variable de Entorno
 
-### Variable de Entorno:
-```bash
-# Crear archivo .env.local en la raíz del frontend
-NEXT_PUBLIC_API_URL=http://localhost:4001
+Crear archivo `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4001/dev/backend
 ```
 
-### Iniciar el Backend:
-```bash
-# Navegar al directorio del backend
-cd ../backend-service
+### Requisitos del Backend
 
-# Instalar dependencias (si es la primera vez)
-npm install
+- Backend ejecutándose en `http://localhost:4001`
+- PostgreSQL activo en `localhost:5432`
 
-# Iniciar el servidor de desarrollo
-npm run dev
-```
+## 🎯 Características
 
-## 🎯 Características de la Aplicación
-
-### 1. **Formulario de Captura de Datos**
+### Formulario (`/form`)
 - Campo de email con validación de formato y unicidad
 - Pregunta opcional: "¿Qué te motivó a aplicar a esta posición?" (máx. 1000 caracteres)
-- Pregunta requerida: "¿Cuál es tu lenguaje de programación favorito?" (JavaScript, Python, Java, C#, Otro)
+- Pregunta requerida: "¿Cuál es tu lenguaje de programación favorito?"
 - Validación en tiempo real con Zod
-- Uso de Server Actions (Next.js 14) para envío sin JavaScript pesado
+- Server Actions de Next.js 14
 
-### 2. **Dashboard de Análisis**
+### Dashboard (`/dashboard`)
 - **Contador de Respuestas**: Total de formularios enviados
 - **Lista de Usuarios Recientes**: Últimos 5 usuarios con email y fecha
-- **Modal Interactivo**: Click en cualquier usuario para ver su motivación completa
-- **Estadísticas de Lenguajes**: Visualización de preferencias con contadores y porcentajes
+- **Modal Interactivo**: Click en usuario para ver motivación completa
+- **Estadísticas de Lenguajes**: Visualización con contadores y porcentajes
 
-### 3. **Interfaz Responsive**
-- Diseño adaptativo para desktop, tablet y móvil
-- Componentes desarrollados con Tailwind CSS
-- Navegación intuitiva entre páginas
+### Interfaz
+- Diseño responsive (mobile, tablet, desktop)
+- Componentes con Tailwind CSS
 - Estados de carga y manejo de errores
+- Navegación intuitiva
 
 ## 📁 Estructura del Proyecto
 
 ```
 frontend/
 ├── src/
-│   ├── app/                          # App Router de Next.js 14
-│   │   ├── layout.tsx               # Root layout + Metadata SEO global
+│   ├── app/                          # App Router Next.js 14
+│   │   ├── layout.tsx               # Root layout + Metadata SEO
 │   │   ├── page.tsx                 # Página de inicio (/)
 │   │   ├── loading.tsx              # Loading UI global
 │   │   ├── error.tsx                # Error boundary global
 │   │   ├── global-error.tsx         # Error boundary crítico
-│   │   ├── not-found.tsx            # Página 404 personalizada
+│   │   ├── not-found.tsx            # Página 404
 │   │   ├── globals.css              # Estilos globales + Tailwind
 │   │   │
-│   │   ├── _components/             # Componentes privados de home
-│   │   │   ├── NavigationCard.tsx  # Card de navegación reutilizable
-│   │   │   └── TechStack.tsx       # Componente de stack tecnológico
+│   │   ├── _components/             # Componentes privados home
+│   │   │   ├── NavigationCard.tsx
+│   │   │   ├── BackLink.tsx
+│   │   │   └── TechStack.tsx
 │   │   │
 │   │   ├── form/                    # Ruta: /form
-│   │   │   ├── page.tsx            # Página del formulario
-│   │   │   ├── actions.ts          # Server Actions (colocation)
-│   │   │   ├── layout.tsx          # Metadata SEO del formulario
-│   │   │   ├── loading.tsx         # Skeleton del formulario
-│   │   │   └── error.tsx           # Error handler del formulario
+│   │   │   ├── page.tsx             # Página del formulario
+│   │   │   ├── actions.ts           # Server Actions
+│   │   │   ├── layout.tsx           # Metadata SEO
+│   │   │   ├── loading.tsx          # Skeleton
+│   │   │   ├── error.tsx            # Error handler
+│   │   │   └── _components/         # Componentes del formulario
+│   │   │       ├── FormInput.tsx
+│   │   │       ├── FormTextarea.tsx
+│   │   │       ├── FormSelect.tsx
+│   │   │       ├── FormMessage.tsx
+│   │   │       └── SubmitButton.tsx
 │   │   │
 │   │   └── dashboard/               # Ruta: /dashboard
-│   │       ├── page.tsx            # Página del dashboard
-│   │       ├── layout.tsx          # Metadata SEO del dashboard
-│   │       ├── loading.tsx         # Skeleton del dashboard
-│   │       ├── error.tsx           # Error handler del dashboard
-│   │       └── _components/        # Componentes privados (no ruteables)
+│   │       ├── page.tsx             # Página del dashboard
+│   │       ├── layout.tsx           # Metadata SEO
+│   │       ├── loading.tsx          # Skeleton
+│   │       ├── error.tsx            # Error handler
+│   │       └── _components/         # Componentes del dashboard
 │   │           ├── ResponseCounter.tsx
 │   │           ├── LanguageStatsCard.tsx
 │   │           ├── RecentUsersList.tsx
-│   │           └── UserModal.tsx   # Modal de detalles de usuario
+│   │           ├── RefreshButton.tsx
+│   │           └── UserModal.tsx
+│   │
+│   ├── components/ui/               # Componentes UI reutilizables
+│   │   ├── Button.tsx               # Botón polimórfico
+│   │   ├── Card.tsx                 # Tarjeta con variantes
+│   │   ├── ErrorContainer.tsx       # Layout para errores
+│   │   └── index.ts                 # Exports centralizados
 │   │
 │   └── services/                    # Servicios compartidos
-│       ├── api.ts                  # Cliente HTTP para backend API
-│       └── api.types.ts            # Tipos TypeScript del API
+│       ├── api.ts                   # Cliente HTTP
+│       └── api.types.ts             # Tipos TypeScript
 │
 ├── public/                          # Archivos estáticos
-│   ├── file.svg                    # Icono de formulario
-│   ├── globe.svg                   # Icono de dashboard
-│   └── ...
 ├── .env.local                       # Variables de entorno (no commitear)
-├── package.json                    # Dependencias y scripts
-├── tailwind.config.ts              # Configuración de Tailwind
-├── next.config.js                  # Configuración de Next.js
-└── README.md                       # Este archivo
+├── package.json
+├── tailwind.config.js
+├── next.config.js
+└── tsconfig.json
 ```
 
-### 🎯 Estructura Mejorada (Next.js 14 Best Practices)
+## 🛠️ Stack Tecnológico
 
-Este proyecto sigue las **mejores prácticas oficiales de Next.js 14** con App Router:
+| Tecnología | Versión | Uso |
+|------------|---------|-----|
+| Next.js | 14.2.30 | Framework React con App Router |
+| React | 18.2.0 | Biblioteca UI |
+| TypeScript | 5 | Tipado estático |
+| Tailwind CSS | 3.4.0 | Framework CSS |
+| Zod | 4.3.6 | Validación de esquemas |
 
-#### 1. **Colocation Pattern** ✅
-- Server Actions junto a la ruta que las usa: `app/form/actions.ts`
-- Componentes colocados junto a las páginas que los usan
-- **Beneficio**: Código relacionado está agrupado, fácil mantenimiento
+## 🔄 Patrones Implementados
 
-#### 2. **Private Folders** ✅
-- Carpetas con prefijo `_` no son ruteables: `_components/`
-- Previene creación accidental de rutas públicas
-- **Beneficio**: Organización interna sin exponer rutas no deseadas
+### Server Actions (Next.js 14)
 
-#### 3. **Feature-Based Organization** ✅
-```
-dashboard/
-├── page.tsx              # Página principal
-├── layout.tsx            # Metadata SEO
-├── loading.tsx           # Loading skeleton
-├── error.tsx             # Error boundary
-└── _components/          # Componentes privados del dashboard
-    ├── ResponseCounter.tsx
-    ├── LanguageStatsCard.tsx
-    ├── RecentUsersList.tsx
-    └── UserModal.tsx
-```
-
-#### 4. **Tipos Centralizados** ✅
-- Tipos del API en archivo separado: `services/api.types.ts`
-- Re-exportados desde `api.ts` para conveniencia
-
-#### 5. **Metadata SEO** ✅
-- Root layout con OpenGraph y Twitter Cards
-- Metadata específica por ruta (form, dashboard)
-- Template de títulos: `%s | Prueba Técnica`
-
-#### 6. **Loading States** ✅
-- `loading.tsx` en cada ruta con skeleton screens
-- UX profesional con estados de carga visuales
-- Suspense boundaries automáticos
-
-#### 7. **Error Boundaries** ✅
-- `error.tsx` por ruta para manejo granular
-- `global-error.tsx` para errores críticos
-- Botones de recuperación (retry)
-
-#### 8. **404 Personalizado** ✅
-- `not-found.tsx` con diseño consistente
-- Navegación de regreso a páginas principales
-
-**Ver**: [Documentación completa de estructura](../docs/FRONTEND_STRUCTURE.md)
-
-## 🛠️ Tecnologías Utilizadas
-
-- **Next.js 14**: Framework de React con App Router y Server Actions
-- **React 18**: Biblioteca de interfaces de usuario con hooks modernos
-- **TypeScript**: Tipado estático para JavaScript
-- **Tailwind CSS**: Framework de CSS utility-first
-- **Zod**: Validación de esquemas y tipos
-- **ESLint**: Linter para mantener código limpio
-
-## 🔄 Flujo de Datos con Server Actions
-
-Este proyecto utiliza **Server Actions** de Next.js 14, una característica que permite ejecutar código del servidor directamente desde componentes del cliente sin necesidad de crear endpoints API tradicionales.
-
-### Ejemplo de uso en FormComponent.tsx:
 ```typescript
 'use client'
 import { useFormState } from 'react-dom'
-import { submitResponse } from './actions'  // Import relativo
+import { submitResponse } from './actions'
 
 const [state, formAction] = useFormState(submitResponse, initialState)
 
 <form action={formAction}>
   {/* campos del formulario */}
-  <button disabled={state.pending}>
-    {state.pending ? 'Enviando...' : 'Enviar'}
-  </button>
 </form>
 ```
 
-### Ventajas de Server Actions:
-- Menor cantidad de código boilerplate
-- Validación automática en el servidor
-- Estados de carga integrados con `pending`
-- Mejor SEO (funciona sin JavaScript del cliente)
-- Manejo de errores simplificado
+### Colocation Pattern
+
+Server Actions junto a la ruta que las usa: `app/form/actions.ts`
+
+### Private Folders
+
+Carpetas con prefijo `_` no son ruteables: `_components/`
+
+### Error Boundaries
+
+`error.tsx` por ruta para manejo granular de errores.
+
+### Loading States
+
+`loading.tsx` con skeleton screens para UX profesional.
 
 ## 🐛 Solución de Problemas
 
 ### Error: "Cannot find module"
 ```bash
-# Limpiar node_modules y reinstalar
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ### Error: "Port 3000 already in use"
 ```bash
-# Liberar el puerto
 lsof -ti:3000 | xargs kill -9
-
-# O usar un puerto diferente
-npm run dev -- -p 3001
+npm run dev
 ```
 
 ### Error de conexión con el backend
-1. Verifica que el backend esté ejecutándose en `http://localhost:4001`
-   ```bash
-   curl http://localhost:4001/dev/backend/health
-   ```
-2. Verifica que PostgreSQL esté activo en el puerto 5432
-   ```bash
-   docker ps | grep postgres
-   # o
-   lsof -i:5432
-   ```
-3. Revisa la variable de entorno `NEXT_PUBLIC_API_URL` en `.env.local`
-4. Revisa la consola del navegador para errores CORS o de red
-
-### Error: "This email has already submitted the form"
-- Este es el comportamiento esperado: cada email solo puede enviar el formulario una vez
-- Para probar nuevamente, usa un email diferente o elimina el registro desde la base de datos
-
-### Problemas con Node.js
 ```bash
-# Cambiar a Node.js 18 si usas nvm
-nvm use 18
+# Verificar backend
+curl http://localhost:4001/dev/backend/health
 
-# Verificar la versión
-node --version  # Debe ser >= 18.0.0
+# Verificar PostgreSQL
+docker ps | grep postgres
 ```
 
-### Error de validación en el formulario
-- **Email inválido**: Verifica que el formato sea correcto (ejemplo@dominio.com)
-- **Lenguaje no seleccionado**: Este campo es obligatorio
-- **Motivación muy larga**: Máximo 1000 caracteres permitidos
+### Error: "Este email ya ha respondido"
+Comportamiento esperado: cada email solo puede enviar el formulario una vez.
 
 ## 📚 Scripts Disponibles
 
 | Comando | Descripción |
 |---------|-------------|
-| `npm run dev` | Inicia el servidor de desarrollo en puerto 3000 |
-| `npm run build` | Construye la aplicación para producción |
-| `npm run start` | Inicia el servidor de producción |
-| `npm run lint` | Ejecuta ESLint para verificar el código |
-
-## 🚀 Despliegue a Producción
-
-### Construcción optimizada:
-```bash
-npm run build
-npm run start
-```
-
-### Variables de entorno requeridas:
-```bash
-NEXT_PUBLIC_API_URL=https://tu-backend.com
-```
-
-### Consideraciones:
-- Asegúrate de que el backend esté accesible desde la URL pública
-- Verifica que CORS esté configurado correctamente en el backend
-- Utiliza HTTPS en producción para mayor seguridad
-
-## 🔗 Enlaces Útiles
-
-- [Documentación de Next.js](https://nextjs.org/docs)
-- [Documentación de React](https://react.dev/)
-- [Documentación de Tailwind CSS](https://tailwindcss.com/docs)
-- [Guía de TypeScript](https://www.typescriptlang.org/docs/)
-
-## 👨‍💻 Desarrollo
-
-Para contribuir al proyecto:
-
-1. Crea una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
-2. Realiza tus cambios siguiendo las convenciones del proyecto
-3. Ejecuta las pruebas: `npm run lint`
-4. Commit tus cambios con formato conventional: `git commit -m "feat(component): agregar nueva funcionalidad"`
-5. Push a tu rama: `git push origin feature/nueva-funcionalidad`
-
-### Convenciones de código:
-- Usar TypeScript para todos los componentes
-- Seguir el patrón de composición de componentes
-- Validar datos con Zod antes de enviar al backend
-- Manejar estados de error y carga en todas las peticiones
-- Mantener componentes pequeños y reutilizables
+| `npm run dev` | Servidor de desarrollo (puerto 3000) |
+| `npm run build` | Construir para producción |
+| `npm run start` | Servidor de producción |
+| `npm run lint` | Ejecutar ESLint |
 
 ---
 
-**Nota**: Este proyecto es parte de un sistema full-stack que incluye backend (Express + Serverless) y base de datos PostgreSQL. Para una experiencia completa, consulta el [README principal](../README.md) del repositorio.
+**Nota**: Este frontend es parte del sistema full-stack. Ver [README principal](../README.md) para documentación completa.
