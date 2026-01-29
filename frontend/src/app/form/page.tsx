@@ -1,8 +1,8 @@
 'use client'
 
-import { submitResponse, type FormState } from '@/app/actions/form'
 import Link from 'next/link'
 import { useFormState } from 'react-dom'
+import { submitResponse, type FormState } from './actions'
 
 const initialState: FormState = {
   success: undefined,
@@ -19,15 +19,26 @@ export default function FormPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium mb-4"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Volver al inicio
-          </Link>
+          <div className="flex justify-between items-center mb-4">
+            <Link 
+              href="/"
+              className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Volver al inicio
+            </Link>
+            <Link 
+              href="/dashboard"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Ir a Dashboard
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Formulario de Respuesta
           </h1>
@@ -50,7 +61,7 @@ export default function FormPage() {
                 name="email"
                 required
                 disabled={pending}
-                className={`w-full px-4 py-3 rounded-lg border ${
+                className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${
                   state.errors?.email 
                     ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
                     : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'
@@ -75,7 +86,7 @@ export default function FormPage() {
                 rows={5}
                 maxLength={1000}
                 disabled={pending}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
                 placeholder="Escribe tu motivación aquí (máximo 1000 caracteres)..."
               />
               {state.errors?.motivation && (
@@ -98,7 +109,7 @@ export default function FormPage() {
                 name="favorite_language"
                 required
                 disabled={pending}
-                className={`w-full px-4 py-3 rounded-lg border ${
+                className={`w-full px-4 py-5 rounded-lg border text-gray-900 text-base ${
                   state.errors?.favorite_language 
                     ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
                     : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'
