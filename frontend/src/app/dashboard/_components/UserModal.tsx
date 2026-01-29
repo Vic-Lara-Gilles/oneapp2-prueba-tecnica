@@ -1,6 +1,7 @@
 'use client'
 
 import type { ResponseEntity } from '@/services/api'
+import { memo, useEffect } from 'react'
 
 interface UserModalProps {
   user: ResponseEntity | null
@@ -10,8 +11,21 @@ interface UserModalProps {
 /**
  * Modal para mostrar la motivación del usuario seleccionado
  * Componente privado del Dashboard (colocation pattern)
+ * Memoizado para optimizar performance
  */
-export default function UserModal({ user, onClose }: UserModalProps) {
+function UserModal({ user, onClose }: UserModalProps) {
+  // Cerrar modal con ESC (Context7: Accessibility best practices)
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && user) {
+        onClose()
+      }
+    }
+    
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [user, onClose])
+
   if (!user) return null
 
   return (
@@ -108,3 +122,6 @@ export default function UserModal({ user, onClose }: UserModalProps) {
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders innecesarios
+export default memo(UserModal)

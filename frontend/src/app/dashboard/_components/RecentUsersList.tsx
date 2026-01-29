@@ -1,11 +1,12 @@
 import type { ResponseEntity } from '@/services/api'
+import { memo } from 'react'
 
 interface RecentUsersListProps {
   recentUsers: ResponseEntity[]
   onUserClick: (user: ResponseEntity) => void
 }
 
-export default function RecentUsersList({ recentUsers, onUserClick }: RecentUsersListProps) {
+function RecentUsersList({ recentUsers, onUserClick }: RecentUsersListProps) {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
@@ -66,3 +67,6 @@ export default function RecentUsersList({ recentUsers, onUserClick }: RecentUser
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders innecesarios
+export default memo(RecentUsersList)

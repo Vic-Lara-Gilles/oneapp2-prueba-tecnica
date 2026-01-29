@@ -1,11 +1,12 @@
 import type { LanguageStats } from '@/services/api'
+import { memo } from 'react'
 
 interface LanguageStatsProps {
   languageStats: LanguageStats[]
   totalCount: number
 }
 
-export default function LanguageStatsCard({ languageStats, totalCount }: LanguageStatsProps) {
+function LanguageStatsCard({ languageStats, totalCount }: LanguageStatsProps) {
   return (
     <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow">
       <div className="flex items-center justify-between mb-6">
@@ -48,3 +49,6 @@ export default function LanguageStatsCard({ languageStats, totalCount }: Languag
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders innecesarios
+export default memo(LanguageStatsCard)

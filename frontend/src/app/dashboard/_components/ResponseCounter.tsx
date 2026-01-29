@@ -1,8 +1,10 @@
+import { memo } from 'react'
+
 interface ResponseCounterProps {
   totalCount: number
 }
 
-export default function ResponseCounter({ totalCount }: ResponseCounterProps) {
+function ResponseCounter({ totalCount }: ResponseCounterProps) {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow">
       <div className="flex items-center justify-between mb-4">
@@ -24,3 +26,6 @@ export default function ResponseCounter({ totalCount }: ResponseCounterProps) {
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders innecesarios
+export default memo(ResponseCounter)
