@@ -50,16 +50,68 @@ export default function DashboardPage() {
     loadDashboardData()
   }, [])
 
-  // Loading state
+  // Loading state - Skeleton profesional
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-        <div className="text-center">
-          <svg className="animate-spin h-12 w-12 text-purple-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <p className="text-gray-600 font-medium">Cargando dashboard...</p>
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header Skeleton */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <div className="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+              <div className="h-6 bg-gray-200 rounded w-32 animate-pulse"></div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="h-10 bg-gray-200 rounded w-96 mb-2 animate-pulse"></div>
+                <div className="h-5 bg-gray-200 rounded w-80 animate-pulse"></div>
+              </div>
+              <div className="hidden sm:block h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Dashboard Grid Skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {/* Counter Skeleton */}
+            <div className="bg-white rounded-2xl shadow-xl p-8 animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
+              <div className="h-16 bg-gray-200 rounded w-24 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
+            </div>
+
+            {/* Stats Skeleton - spans 2 columns on lg */}
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-xl p-8 animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-64 mb-6"></div>
+              <div className="space-y-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    <div className="flex-1 h-8 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded w-12"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Users Skeleton */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-48 mb-6"></div>
+            <div className="space-y-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-gray-200 rounded w-48"></div>
+                      <div className="h-3 bg-gray-200 rounded w-32"></div>
+                    </div>
+                  </div>
+                  <div className="h-8 bg-gray-200 rounded w-24"></div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     )
