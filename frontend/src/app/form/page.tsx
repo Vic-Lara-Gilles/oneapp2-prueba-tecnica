@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useFormState } from 'react-dom'
 import { submitResponse, type FormState } from './actions'
 
@@ -12,14 +14,50 @@ const initialState: FormState = {
 
 export default function FormPage() {
   const [state, formAction] = useFormState(submitResponse, initialState)
-  const pending = false // useFormState doesn't provide pending directly in React 18
+  const [pending, setPending] = useState(false)
+  const [startTime, setStartTime] = useState<number | null>(null)
+  const router = useRouter()
+
+  // Wrapper para manejar el estado de pending manualmente
+  const handleSubmit = (formData: FormData) => {
+    setPending(true)
+    setStartTime(Date.now()) // Guardar tiempo de inicio
+    formAction(formData)
+  }
+
+  // Resetear pending cuando el estado cambia - asegurar mínimo 500ms de skeleton (mejor práctica UX)
+  useEffect(() => {
+    if (state.success !== undefined && pending && startTime) {
+      const elapsed = Date.now() - startTime
+      const MIN_DISPLAY_TIME = 500 // Estándar profesional: evitar flashes visuales
+      const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed)
+      
+      const timer = setTimeout(() => {
+        setPending(false)
+        setStartTime(null)
+      }, remainingTime)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [state, pending, startTime])
+
+  // Redirigir al dashboard cuando el formulario se envía exitosamente - después de 1 segundo
+  useEffect(() => {
+    if (state.success === true && !pending) {
+      const redirectTimer = setTimeout(() => {
+        router.push('/dashboard')
+      }, 1000) // Mostrar mensaje de éxito por 1 segundo antes de redirigir
+      
+      return () => clearTimeout(redirectTimer)
+    }
+  }, [state.success, pending, router])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
+          <div className="mb-4">
             <Link 
               href="/"
               className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium"
@@ -28,15 +66,6 @@ export default function FormPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               Volver al inicio
-            </Link>
-            <Link 
-              href="/dashboard"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Ir a Dashboard
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
             </Link>
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
@@ -49,17 +78,46 @@ export default function FormPage() {
 
         {/* Form Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-          <form action={formAction} className="space-y-6">
+          {pending ? (
+            // Skeleton Loading State
+            <div className="space-y-6 animate-pulse">
+              {/* Email Skeleton */}
+              <div>
+                <div className="h-5 bg-gray-200 rounded w-24 mb-2"></div>
+                <div className="h-12 bg-gray-200 rounded-lg"></div>
+              </div>
+              
+              {/* Motivation Skeleton */}
+              <div>
+                <div className="h-5 bg-gray-200 rounded w-64 mb-2"></div>
+                <div className="h-32 bg-gray-200 rounded-lg"></div>
+              </div>
+              
+              {/* Language Skeleton */}
+              <div>
+                <div className="h-5 bg-gray-200 rounded w-72 mb-2"></div>
+                <div className="h-14 bg-gray-200 rounded-lg"></div>
+              </div>
+              
+              {/* Button Skeleton */}
+              <div className="h-12 bg-purple-200 rounded-lg flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </div>
+            </div>
+          ) : (
+          <form action={handleSubmit} className="space-y-6">
             {/* Email Field (REQUIRED) */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
                 Email <span className="text-red-500">*</span>
               </label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 name="email"
-                required
                 disabled={pending}
                 className={`w-full px-4 py-3 rounded-lg border text-gray-900 ${
                   state.errors?.email 
@@ -107,7 +165,6 @@ export default function FormPage() {
               <select
                 id="favorite_language"
                 name="favorite_language"
-                required
                 disabled={pending}
                 className={`w-full px-4 py-5 rounded-lg border text-gray-900 text-base ${
                   state.errors?.favorite_language 
@@ -180,22 +237,8 @@ export default function FormPage() {
                 </>
               )}
             </button>
-
-            {/* Success Action */}
-            {state.success && (
-              <div className="pt-4 border-t border-gray-200">
-                <Link
-                  href="/dashboard"
-                  className="w-full py-3 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors flex items-center justify-center gap-2"
-                >
-                  Ver Dashboard
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </Link>
-              </div>
-            )}
           </form>
+        )}
         </div>
 
         {/* Footer Info */}

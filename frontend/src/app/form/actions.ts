@@ -13,9 +13,12 @@ const formSchema = z.object({
     .max(1000, 'La motivación no puede exceder 1000 caracteres')
     .optional()
     .nullable(),
-  favorite_language: z.enum(['JavaScript', 'Python', 'Java', 'C#', 'Otro'], {
-    message: 'Debes seleccionar un lenguaje de programación'
-  })
+  favorite_language: z.string()
+    .min(1, 'Debes seleccionar un lenguaje de programación')
+    .refine(
+      (val) => ['JavaScript', 'Python', 'Java', 'C#', 'Otro'].includes(val),
+      { message: 'Debes seleccionar un lenguaje de programación válido' }
+    )
 })
 
 export type FormState = {
