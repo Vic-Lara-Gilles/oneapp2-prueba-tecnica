@@ -1,7 +1,7 @@
 'use client'
 
 import type { LanguageStats, ResponseEntity } from '@/services/api'
-import * as api from '@/services/api'
+import { getCount, getRecent, getStats } from '@/services/api'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import LanguageStatsCard from './_components/LanguageStatsCard'
@@ -29,9 +29,9 @@ export default function DashboardPage() {
 
       // Cargar datos en paralelo
       const [count, recent, stats] = await Promise.all([
-        api.getCount(),
-        api.getRecent(),
-        api.getStats()
+        getCount(),
+        getRecent(),
+        getStats()
       ])
 
       setTotalCount(count.total)

@@ -1,6 +1,6 @@
 'use server'
 
-import * as api from '@/services/api'
+import { createResponse } from '@/services/api'
 import { z } from 'zod'
 
 // Zod schema para validación del formulario (Context7: Zod safeParse pattern)
@@ -56,7 +56,7 @@ export async function submitResponse(
     }
 
     // Llamar al API
-    await api.createResponse(validatedFields.data)
+    await createResponse(validatedFields.data)
 
     return {
       success: true,
