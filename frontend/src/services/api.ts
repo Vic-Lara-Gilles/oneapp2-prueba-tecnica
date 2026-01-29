@@ -1,23 +1,12 @@
+import type {
+  CountResponse,
+  CreateResponseDTO,
+  EmailCheckResponse,
+  LanguageStats,
+  ResponseEntity
+} from './api.types'
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4001/dev/backend'
-
-export interface ResponseEntity {
-  id: number
-  email: string
-  motivation: string | null
-  favorite_language: string
-  submitted_at: string
-}
-
-export interface LanguageStats {
-  language: string
-  count: number
-}
-
-export interface CreateResponseDTO {
-  email: string
-  motivation?: string | null
-  favorite_language: string
-}
 
 /**
  * POST /api/responses - Crear nueva respuesta
@@ -42,7 +31,7 @@ export async function createResponse(data: CreateResponseDTO): Promise<ResponseE
 /**
  * GET /api/responses/count - Obtener conteo total
  */
-export async function getCount(): Promise<{ total: number }> {
+export async function getCount(): Promise<CountResponse> {
   const response = await fetch(`${API_URL}/api/responses/count`)
   
   if (!response.ok) {
@@ -94,7 +83,7 @@ export async function getByEmail(email: string): Promise<ResponseEntity> {
 /**
  * GET /api/responses/check/:email - Verificar si email existe
  */
-export async function checkEmail(email: string): Promise<{ exists: boolean }> {
+export async function checkEmail(email: string): Promise<EmailCheckResponse> {
   const response = await fetch(`${API_URL}/api/responses/check/${encodeURIComponent(email)}`)
   
   if (!response.ok) {
@@ -103,3 +92,9 @@ export async function checkEmail(email: string): Promise<{ exists: boolean }> {
 
   return response.json()
 }
+
+// Re-export types for convenience
+export type {
+  CountResponse, CreateResponseDTO, EmailCheckResponse, LanguageStats, ResponseEntity
+} from './api.types'
+

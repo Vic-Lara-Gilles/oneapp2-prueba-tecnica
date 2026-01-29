@@ -9,7 +9,7 @@ interface UserModalProps {
 
 /**
  * Modal para mostrar la motivación del usuario seleccionado
- * Context7: Tailwind CSS modal pattern
+ * Componente privado del Dashboard (colocation pattern)
  */
 export default function UserModal({ user, onClose }: UserModalProps) {
   if (!user) return null
