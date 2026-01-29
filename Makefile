@@ -1,4 +1,4 @@
-.PHONY: start stop install dev clean db-up db-down db-reset db-psql logs status
+.PHONY: start stop install dev clean db-up db-down db-reset db-psql logs status backend frontend help
 
 # Comando principal - instala todo y ejecuta
 start: install env db-up db-wait
