@@ -1,0 +1,26 @@
+# Nombre del servicio (Lambda)
+service: backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  logRetentionInDays: 30
+
+plugins:
+  - serverless-offline
+
+functions:
+  api:
+    handler: dist/handler.handler
+    events:
+      - http:
+          path: /${self:service}/{proxy+}
+          method: ANY
+          cors: true
+    environment:
+      BASE_PATH: ${self:service}
+
+custom:
+  serverless-offline:
+    httpPort: 4001
+    lambdaPort: 4101
