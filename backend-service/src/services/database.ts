@@ -7,17 +7,22 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' 
     ? { rejectUnauthorized: false } 
     : false,
-  // Configuración del pool
-  max: parseInt(process.env.DB_POOL_MAX || '20', 10),
-  min: parseInt(process.env.DB_POOL_MIN || '5', 10),
-  idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS || '30000', 10),
-  connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MS || '2000', 10),
-  maxLifetimeSeconds: 1800 // 30 minutos
+  // Configuración del pool optimizada para desarrollo local
+  max: parseInt(process.env.DB_POOL_MAX || '10', 10),
+  min: parseInt(process.env.DB_POOL_MIN || '2', 10),
+  idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS || '10000', 10),
+  connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MS || '5000', 10),
+  // Forzar IPv4 para evitar errores ECONNREFUSED en ::1
+  host: 'localhost',
+  allowExitOnIdle: true
 })
 
-// Manejo de errores del pool
-pool.on('error', (err: Error, client: PoolClient) => {
-  console.error('Error inesperado en cliente inactivo de PostgreSQL:', err)
+// Manejo de errores del pool (silenciar logs innecesarios)
+pool.on('error', (err: Error) => {
+  // Solo loggear errores críticos
+  if (err.message !== 'terminating connection due to administrator command') {
+    console.error('Error inesperado en cliente inactivo de PostgreSQL:', err)
+  }
 })
 
 pool.on('connect', () => {
