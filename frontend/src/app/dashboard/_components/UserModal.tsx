@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui'
 import type { ResponseEntity } from '@/services/api'
 import { memo, useEffect } from 'react'
 
@@ -111,12 +112,9 @@ function UserModal({ user, onClose }: UserModalProps) {
 
         {/* Footer */}
         <div className="bg-gray-50 px-6 py-4 rounded-b-xl border-t border-gray-200">
-          <button
-            onClick={onClose}
-            className="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-          >
+          <Button onClick={onClose} variant="primary" size="sm" fullWidth>
             Cerrar
-          </button>
+          </Button>
         </div>
       </div>
     </div>
