@@ -10,6 +10,26 @@ Crear un sistema completo que permita a los usuarios responder un cuestionario y
 
 ---
 
+## 📑 Índice
+
+- [Estado de Implementación](#-estado-de-implementación)
+- [Stack Tecnológico](#-stack-tecnológico)
+- [Requerimientos Funcionales](#-requerimientos-funcionales)
+  - [Formulario de Respuestas](#1-formulario-de-respuestas)
+  - [Dashboard de Estadísticas](#2-dashboard-de-estadísticas)
+- [Arquitectura Técnica](#️-arquitectura-técnica)
+- [Instalación y Configuración](#-instalación-y-configuración)
+- [Base de Datos](#️-base-de-datos)
+- [API Endpoints](#-api-endpoints)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Criterios de Evaluación](#-criterios-de-evaluación-cumplidos)
+- [Capturas de Pantalla](#-capturas-de-pantalla)
+- [Solución de Problemas](#-solución-de-problemas)
+- [Documentación Adicional](#-documentación-adicional)
+- [Preguntas Frecuentes](#-preguntas-frecuentes)
+
+---
+
 ## ✅ Estado de Implementación
 
 | Requerimiento | Estado | Descripción |
