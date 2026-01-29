@@ -7,7 +7,7 @@
 - Navegación a Formulario y Dashboard
 - Diseño responsive
 
-### 2. Formulario Vacío
+### 2. Formulario Vacío01-home-page.png
 **Archivo**: `02-form-empty.png`
 - Campo email (requerido)
 - Campo motivación (opcional, max 1000 chars)
@@ -56,37 +56,3 @@
 **Archivo**: `10-backend-running.png`
 - Terminal con: `npm run dev` en backend-service
 - Puerto 4001 escuchando
-
----
-
-## 🎥 Instrucciones para Tomar Screenshots
-
-1. **Iniciar servicios**:
-   ```bash
-   make dev
-   ```
-
-2. **Tomar capturas**:
-   - macOS: `Cmd + Shift + 4` (selección) o `Cmd + Shift + 3` (pantalla completa)
-   - Windows: `Win + Shift + S`
-   - Linux: `gnome-screenshot -a`
-
-3. **Guardar en esta carpeta** con los nombres exactos listados arriba
-
-4. **Commit y push**:
-   ```bash
-   git add screenshots/
-   git commit -m "docs: add application screenshots and demonstration"
-   git push
-   ```
-
----
-
-## ✅ Checklist de Demostración
-
-- [ ] Aplicación corriendo en localhost:3000
-- [ ] Backend respondiendo en localhost:4001
-- [ ] PostgreSQL con 10+ registros de prueba
-- [ ] Todas las funcionalidades capturadas
-- [ ] Screenshots claras y legibles
-- [ ] README actualizado con referencias
