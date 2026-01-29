@@ -37,6 +37,29 @@ Aplicación Full Stack que permite a los usuarios responder un cuestionario de a
 
 ---
 
+## 📸 Capturas de Pantalla
+
+### Aplicación Funcionando
+
+| Vista | Descripción |
+|-------|-------------|
+| ![Home](screenshots/01-home-page.png) | Página principal con navegación |
+| ![Form](screenshots/02-form-empty.png) | Formulario de respuestas |
+| ![Dashboard](screenshots/06-dashboard.png) | Dashboard con 3 componentes (contador, usuarios recientes, estadísticas) |
+| ![Modal](screenshots/07-modal-open.png) | Modal mostrando motivación de usuario |
+
+### Funcionalidades Demostradas
+
+- ✅ **Validación de formulario** con mensajes de error
+- ✅ **Email único**: Error 409 al intentar duplicar
+- ✅ **Datos de prueba**: 10+ registros en base de datos
+- ✅ **Modal interactivo**: Click en usuario muestra motivación
+- ✅ **Estadísticas**: Conteo por lenguaje de programación
+
+> Ver carpeta `screenshots/` para más capturas detalladas
+
+---
+
 ## 🚀 Instalación y Configuración
 
 ### Prerrequisitos
@@ -546,18 +569,34 @@ oneapp2-prueba-tecnica/
 │   ├── 📁 src/
 │   │   ├── 📁 app/
 │   │   │   ├── page.tsx          # Página principal
-│   │   │   ├── layout.tsx        # Layout global
+│   │   │   ├── layout.tsx        # Layout global + Metadata SEO
+│   │   │   ├── loading.tsx       # Loading UI global
+│   │   │   ├── error.tsx         # Error boundary global
+│   │   │   ├── global-error.tsx  # Error boundary crítico
+│   │   │   ├── not-found.tsx     # Página 404 personalizada
 │   │   │   ├── globals.css       # Estilos Tailwind
-│   │   │   ├── 📁 actions/
-│   │   │   │   └── form.ts       # Server Action (submit)
+│   │   │   ├── 📁 _components/   # Componentes privados home
+│   │   │   │   ├── NavigationCard.tsx
+│   │   │   │   └── TechStack.tsx
 │   │   │   ├── 📁 form/
-│   │   │   │   └── page.tsx      # Página del formulario
+│   │   │   │   ├── page.tsx      # Página del formulario
+│   │   │   │   ├── actions.ts    # Server Actions (colocation)
+│   │   │   │   ├── layout.tsx    # Metadata SEO
+│   │   │   │   ├── loading.tsx   # Loading skeleton
+│   │   │   │   └── error.tsx     # Error boundary
 │   │   │   └── 📁 dashboard/
-│   │   │       └── page.tsx      # Página del dashboard
-│   │   ├── 📁 components/
-│   │   │   └── UserModal.tsx     # Modal de motivación
+│   │   │       ├── page.tsx      # Página del dashboard
+│   │   │       ├── layout.tsx    # Metadata SEO
+│   │   │       ├── loading.tsx   # Loading skeleton
+│   │   │       ├── error.tsx     # Error boundary
+│   │   │       └── 📁 _components/  # Componentes privados
+│   │   │           ├── ResponseCounter.tsx
+│   │   │           ├── LanguageStatsCard.tsx
+│   │   │           ├── RecentUsersList.tsx
+│   │   │           └── UserModal.tsx  # Modal de motivación
 │   │   └── 📁 services/
-│   │       └── api.ts            # Cliente API (fetch)
+│   │       ├── api.ts            # Cliente API (fetch)
+│   │       └── api.types.ts      # Tipos TypeScript
 │   ├── next.config.js
 │   ├── tailwind.config.js
 │   ├── tsconfig.json
@@ -625,11 +664,19 @@ oneapp2-prueba-tecnica/
 
 ### Patrones de Diseño Implementados
 
+#### Backend
 1. **Repository Pattern**: Capa de abstracción para operaciones de base de datos
 2. **MVC (Model-View-Controller)**: Separación de responsabilidades
 3. **Singleton Pattern**: Pool de conexiones PostgreSQL
 4. **Middleware Pattern**: Validación y manejo de errores
+
+#### Frontend
 5. **Server Actions**: Validación y mutación en servidor (Next.js 14)
+6. **Colocation Pattern**: Server Actions y componentes junto a rutas
+7. **Private Folders Pattern**: Componentes privados con prefijo `_` (no ruteables)
+8. **Error Boundaries**: Manejo granular de errores por ruta
+9. **Loading States**: Suspense boundaries con skeletons
+10. **SEO Optimization**: Metadata por ruta con OpenGraph/Twitter Cards
 
 ---
 

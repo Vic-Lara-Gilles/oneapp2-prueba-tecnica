@@ -130,31 +130,104 @@ npm run dev
 ```
 frontend/
 ├── src/
-│   ├── app/                     # App Router de Next.js
-│   │   ├── layout.tsx          # Layout principal con navegación
-│   │   ├── page.tsx            # Página de inicio
-│   │   ├── globals.css         # Estilos globales
-│   │   ├── form/
-│   │   │   └── page.tsx        # Página del formulario
-│   │   ├── dashboard/
-│   │   │   └── page.tsx        # Dashboard de análisis
-│   │   └── actions/
-│   │       └── form.ts         # Server Actions para formulario
-│   ├── components/
-│   │   ├── FormComponent.tsx    # Componente del formulario con validación
-│   │   ├── ResponseCounter.tsx  # Contador total de respuestas
-│   │   ├── RecentUsersList.tsx  # Lista de últimos 5 usuarios
-│   │   ├── LanguageStats.tsx    # Estadísticas de lenguajes
-│   │   └── UserModal.tsx        # Modal para mostrar motivación
-│   └── services/
-│       └── api.ts              # Cliente HTTP para backend API
-├── public/                     # Archivos estáticos
-├── .env.local                  # Variables de entorno (no commitear)
-├── package.json               # Dependencias y scripts
-├── tailwind.config.ts         # Configuración de Tailwind
-├── next.config.js             # Configuración de Next.js
-└── README.md                  # Este archivo
+│   ├── app/                          # App Router de Next.js 14
+│   │   ├── layout.tsx               # Root layout + Metadata SEO global
+│   │   ├── page.tsx                 # Página de inicio (/)
+│   │   ├── loading.tsx              # Loading UI global
+│   │   ├── error.tsx                # Error boundary global
+│   │   ├── global-error.tsx         # Error boundary crítico
+│   │   ├── not-found.tsx            # Página 404 personalizada
+│   │   ├── globals.css              # Estilos globales + Tailwind
+│   │   │
+│   │   ├── _components/             # Componentes privados de home
+│   │   │   ├── NavigationCard.tsx  # Card de navegación reutilizable
+│   │   │   └── TechStack.tsx       # Componente de stack tecnológico
+│   │   │
+│   │   ├── form/                    # Ruta: /form
+│   │   │   ├── page.tsx            # Página del formulario
+│   │   │   ├── actions.ts          # Server Actions (colocation)
+│   │   │   ├── layout.tsx          # Metadata SEO del formulario
+│   │   │   ├── loading.tsx         # Skeleton del formulario
+│   │   │   └── error.tsx           # Error handler del formulario
+│   │   │
+│   │   └── dashboard/               # Ruta: /dashboard
+│   │       ├── page.tsx            # Página del dashboard
+│   │       ├── layout.tsx          # Metadata SEO del dashboard
+│   │       ├── loading.tsx         # Skeleton del dashboard
+│   │       ├── error.tsx           # Error handler del dashboard
+│   │       └── _components/        # Componentes privados (no ruteables)
+│   │           ├── ResponseCounter.tsx
+│   │           ├── LanguageStatsCard.tsx
+│   │           ├── RecentUsersList.tsx
+│   │           └── UserModal.tsx   # Modal de detalles de usuario
+│   │
+│   └── services/                    # Servicios compartidos
+│       ├── api.ts                  # Cliente HTTP para backend API
+│       └── api.types.ts            # Tipos TypeScript del API
+│
+├── public/                          # Archivos estáticos
+│   ├── file.svg                    # Icono de formulario
+│   ├── globe.svg                   # Icono de dashboard
+│   └── ...
+├── .env.local                       # Variables de entorno (no commitear)
+├── package.json                    # Dependencias y scripts
+├── tailwind.config.ts              # Configuración de Tailwind
+├── next.config.js                  # Configuración de Next.js
+└── README.md                       # Este archivo
 ```
+
+### 🎯 Estructura Mejorada (Next.js 14 Best Practices)
+
+Este proyecto sigue las **mejores prácticas oficiales de Next.js 14** con App Router:
+
+#### 1. **Colocation Pattern** ✅
+- Server Actions junto a la ruta que las usa: `app/form/actions.ts`
+- Componentes colocados junto a las páginas que los usan
+- **Beneficio**: Código relacionado está agrupado, fácil mantenimiento
+
+#### 2. **Private Folders** ✅
+- Carpetas con prefijo `_` no son ruteables: `_components/`
+- Previene creación accidental de rutas públicas
+- **Beneficio**: Organización interna sin exponer rutas no deseadas
+
+#### 3. **Feature-Based Organization** ✅
+```
+dashboard/
+├── page.tsx              # Página principal
+├── layout.tsx            # Metadata SEO
+├── loading.tsx           # Loading skeleton
+├── error.tsx             # Error boundary
+└── _components/          # Componentes privados del dashboard
+    ├── ResponseCounter.tsx
+    ├── LanguageStatsCard.tsx
+    ├── RecentUsersList.tsx
+    └── UserModal.tsx
+```
+
+#### 4. **Tipos Centralizados** ✅
+- Tipos del API en archivo separado: `services/api.types.ts`
+- Re-exportados desde `api.ts` para conveniencia
+
+#### 5. **Metadata SEO** ✅
+- Root layout con OpenGraph y Twitter Cards
+- Metadata específica por ruta (form, dashboard)
+- Template de títulos: `%s | Prueba Técnica`
+
+#### 6. **Loading States** ✅
+- `loading.tsx` en cada ruta con skeleton screens
+- UX profesional con estados de carga visuales
+- Suspense boundaries automáticos
+
+#### 7. **Error Boundaries** ✅
+- `error.tsx` por ruta para manejo granular
+- `global-error.tsx` para errores críticos
+- Botones de recuperación (retry)
+
+#### 8. **404 Personalizado** ✅
+- `not-found.tsx` con diseño consistente
+- Navegación de regreso a páginas principales
+
+**Ver**: [Documentación completa de estructura](../docs/FRONTEND_STRUCTURE.md)
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -172,15 +245,15 @@ Este proyecto utiliza **Server Actions** de Next.js 14, una característica que 
 ### Ejemplo de uso en FormComponent.tsx:
 ```typescript
 'use client'
-import { useActionState } from 'react'
-import { submitResponse } from '../app/actions/form'
+import { useFormState } from 'react-dom'
+import { submitResponse } from './actions'  // Import relativo
 
-const [state, formAction, pending] = useActionState(submitResponse, initialState)
+const [state, formAction] = useFormState(submitResponse, initialState)
 
 <form action={formAction}>
   {/* campos del formulario */}
-  <button disabled={pending}>
-    {pending ? 'Enviando...' : 'Enviar'}
+  <button disabled={state.pending}>
+    {state.pending ? 'Enviando...' : 'Enviar'}
   </button>
 </form>
 ```
