@@ -178,32 +178,29 @@ git clone <repository-url>
 cd oneapp2-prueba-tecnica
 ```
 
-### 2️⃣ Instalar Dependencias
+### 2️⃣ Configuración Completa (Un Solo Comando)
 
-**Opción A: Con Makefile (Recomendado)**
+**🎯 Método Rápido (Recomendado)**
 ```bash
-make install
+make start
 ```
 
-**Opción B: Manual**
+Este comando ejecuta automáticamente:
+- ✅ Instalación de dependencias (backend + frontend)
+- ✅ Creación de archivos `.env` desde `.env.example`
+- ✅ Inicio de PostgreSQL en Docker
+- ✅ Espera a que la base de datos esté lista
+
+**Método Manual (Si no usas Makefile)**
 ```bash
-# Backend
-cd backend-service
-npm install
+# 1. Instalar dependencias
+cd backend-service && npm install
+cd ../frontend && npm install
+Variables de Entorno (Opcional - `make start` las crea automáticamente)
 
-# Frontend
-cd ../frontend
-npm install
-```
+Si ejecutaste `make start`, los archivos `.env` ya están configurados. Si prefieres configurarlos manualmente:
 
-### 3️⃣ Configurar Variables de Entorno
-
-**Backend** - Crear `backend-service/.env`:
-```bash
-cp backend-service/.env.example backend-service/.env
-```
-
-Contenido:
+**Backend** - `backend-service/.env`:
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/prueba_tecnica
 NODE_ENV=development
@@ -211,27 +208,30 @@ PORT=4001
 CORS_ORIGIN=http://localhost:3000
 ```
 
-**Frontend** - Crear `frontend/.env.local`:
-```bash
-cp frontend/.env.local.example frontend/.env.local
-```
-
-Contenido:
+**Frontend** - `frontend/.env.local`:
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:4001/dev/backend
 ```
 
-> **Seguridad**: Los archivos `.env` están en `.gitignore` y NUNCA deben subirse al repositorio.
+> **💡 Nota**: `make start` copia automáticamente `.env.example` → `.env` si no existen.
+>
+> **🔒 Seguridad**: Los archivos `.env` están en `.gitignore` y NUNCA deben subirse al repositorio.
 
-### 4️⃣ Iniciar la Base de Datos
+### 4️⃣ Base de Datos (Automática con `make start`)
+
+Si ejecutaste `make start`, PostgreSQL ya está corriendo. Para gestión manual:
 
 ```bash
-# Con Makefile
-make db-up
-
-# O con Docker directamente
-docker compose up -d postgres
+make db-up      # Iniciar PostgreSQL
+make db-down    # Detener PostgreSQL
+make db-reset   # Resetear base de datos
+make db-psql    # Conectar a PostgreSQL
 ```
+
+La base de datos se inicializa automáticamente con:
+- ✅ Tabla `responses` creada
+- ✅ Índices optimizados
+- ✅ Datos de prueba (5 registros 
 
 La base de datos se inicializa automáticamente con:
 - ✅ Tabla `responses` creada
@@ -240,15 +240,23 @@ La base de datos se inicializa automáticamente con:
 
 ### 5️⃣ Iniciar los Servicios
 
-**Opción A: Con Makefile (Todo en uno)**
+**🚀 Inicio Rápido (Recomendado)**
+
 ```bash
-make dev
+# 1. Preparar todo (instalar deps, configurar .env, iniciar DB)
+make start
+
+# 2. En terminal 1 - Iniciar Backend
+make backend
+
+# 3. En terminal 2 - Iniciar Frontend
+make frontend
 ```
 
-**Opción B: Manual (3 terminales)**
+**Opción Manual (Sin Makefile)**
 ```bash
 # Terminal 1 - Base de datos
-make db-up
+docker compose up -d postgres
 
 # Terminal 2 - Backend
 cd backend-service
@@ -273,6 +281,16 @@ npm run dev
 
 ## 🗄️ Base de Datos
 
+
+### 7️⃣ Comandos Útiles
+
+```bash
+make help       # Ver todos los comandos disponibles
+make status     # Ver estado de todos los servicios
+make stop       # Detener todos los servicios
+make clean      # Limpiar node_modules y cache
+make db-reset   # Resetear base de datos
+```
 ### Esquema de la Tabla `responses`
 
 ```sql
