@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,6 +12,16 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Prueba Técnica Full Stack",
@@ -20,15 +30,6 @@ export const metadata: Metadata = {
   description: "Sistema de Formulario y Dashboard con Next.js, Express y PostgreSQL - Prueba Técnica Full Stack Developer",
   keywords: ["Next.js", "React", "TypeScript", "PostgreSQL", "Express", "Full Stack"],
   authors: [{ name: "Developer" }],
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
   openGraph: {
     title: "Prueba Técnica Full Stack",
     description: "Sistema de Formulario y Dashboard con Next.js, Express y PostgreSQL",
